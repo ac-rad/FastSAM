@@ -93,6 +93,7 @@ class FastSAMPrompt:
         return [x1, y1, x2, y2]
 
     def plot_to_result(self,
+             img,
              annotations,
              bboxes=None,
              points=None,
@@ -103,7 +104,8 @@ class FastSAMPrompt:
              withContours=True) -> np.ndarray:
         if isinstance(annotations[0], dict):
             annotations = [annotation['segmentation'] for annotation in annotations]
-        image = self.img
+        # image = self.img
+        image = img
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         original_h = image.shape[0]
         original_w = image.shape[1]
@@ -190,6 +192,7 @@ class FastSAMPrompt:
             
     # Remark for refactoring: IMO a function should do one thing only, storing the image and plotting should be seperated and do not necessarily need to be class functions but standalone utility functions that the user can chain in his scripts to have more fine-grained control. 
     def plot(self,
+             img,
              annotations,
              output_path,
              bboxes=None,
@@ -202,6 +205,7 @@ class FastSAMPrompt:
         if len(annotations) == 0:
             return None
         result = self.plot_to_result(
+            img,
             annotations, 
             bboxes, 
             points, 
